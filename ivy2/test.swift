@@ -19,10 +19,9 @@ struct test: View {
            return "Volunteering"
         case 2:
             return "Plastic Reduction"
-
         case 3:
             return "Sustainable"
-        case 4:
+        case 4:     
             return "Recycling"
         case 5:
             return "Planting"
@@ -57,10 +56,10 @@ struct test: View {
             var body: some View {
                 NavigationView {
                     ZStack {
-                        EmptyNavigationLink(
-                            destination: { DetailView(coreDM: CoreDateManager(), currentHabitName: getHabitName(num: $0),currentHabitDetails: getHabitDetails(num: $0),habit: habit) },
-                            selection: $currentSelection
-                        )
+//                        EmptyNavigationLink(
+//                            destination: { DetailView(coreDM: CoreDateManager(), currentHabitName: getHabitName(num: $0),currentHabitDetails: getHabitDetails(num: $0),habit: habit) },
+//                            selection: $currentSelection
+//                        )
                        // Form {
                         ScrollView {
                             LazyVGrid(columns: gridItemLayout, spacing: 50) {
@@ -121,14 +120,14 @@ struct test: View {
 //                            .textFieldStyle(RoundedBorderTextFieldStyle())
                         Text("Did you contorbute ?")
                         Button("yes"){
-                            if(coreDM.isItOnCoredata(name: currentHabitName).name != "no" ){
-                                let currentHabit = coreDM.isItOnCoredata(name: currentHabitName)
+                            if(coreDM.isItOnCoredata(name: currentHabitName) ){
+                                let currentHabit = coreDM.fitchByName(name: currentHabitName)
                                 currentHabit.points = currentHabit.points + 5
                                 coreDM.updateHabit()
-                                
                                 populateHabits()
                             }else{
                                 //create new Habit
+                                populateHabits()
                                 coreDM.saveHabit(name: currentHabitName, points: 5)
                                 populateHabits()
                             }

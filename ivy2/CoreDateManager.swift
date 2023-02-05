@@ -21,7 +21,7 @@ class CoreDateManager{
             }
         }
     }
-    func isItOnCoredata(name: String) -> Habit{
+    func isItOnCoredata(name: String) -> Bool{
         let fetchRequest: NSFetchRequest<NSFetchRequestResult>
         fetchRequest = Habit.fetchRequest()
         // Configure a fetch request to fetch at most 1 result
@@ -37,20 +37,49 @@ class CoreDateManager{
         // matching the predicate
         let objects =   try! context.fetch(fetchRequest).first
         print("objects : \( String(describing: objects))")
-        let nilHabit = Habit(context: persistentContainer.viewContext)
-        nilHabit.name = "no"
-        nilHabit.points = 0
-        if ((objects) != nil){
-            return objects as! Habit
-        }else{
-            return nilHabit
-        }
+        return (objects != nil)
+//        let nilHabit = Habit(context: persistentContainer.viewContext)
+//        nilHabit.name = "no"
+//        nilHabit.points = 0
+//        if ((objects) != nil){
+//            return objects as! Habit
+//        }else{
+//            return nilHabit
+//        }
+        
+    }
+    func fitchByName(name: String) -> Habit{
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult>
+        fetchRequest = Habit.fetchRequest()
+        // Configure a fetch request to fetch at most 1 result
+       // let fetchRequest: NSFetchRequest<Habit>
+        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(
+            format: "name LIKE %@", name
+        )
+
+        // Get a reference to a NSManagedObjectContext
+        let context = persistentContainer.viewContext
+        // Perform the fetch request to get the objects
+        // matching the predicate
+        let objects =   try! context.fetch(fetchRequest).first
+        print("objects : \( String(describing: objects))")
+        return objects! as! Habit
+//        let nilHabit = Habit(context: persistentContainer.viewContext)
+//        nilHabit.name = "no"
+//        nilHabit.points = 0
+//        if ((objects) != nil){
+//            return objects as! Habit
+//        }else{
+//            return nilHabit
+//        }
         
     }
     func updateHabit(){
  
         do{
             try persistentContainer.viewContext.save()
+           
         }catch{
             persistentContainer.viewContext.rollback()
         }
